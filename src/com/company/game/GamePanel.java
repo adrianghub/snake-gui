@@ -15,8 +15,8 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int UNIT_SIZE = 20;
     static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT / UNIT_SIZE);
     static final int DELAY = 75;
-    final int x[] = new int[GAME_UNITS];
-    final int y[] = new int[GAME_UNITS];
+    final int[] x = new int[GAME_UNITS];
+    final int [] y = new int[GAME_UNITS];
     int bodyParts = 3;
     int birdsEaten;
     int appleX;
@@ -27,11 +27,19 @@ public class GamePanel extends JPanel implements ActionListener {
     Random random;
 
     GamePanel() {
-
+        random = new Random();
+        this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        this.setBackground(Color.darkGray);
+        this.setFocusable(true);
+        this.addKeyListener(new MyKeyAdapter());
+        startGame();
     }
 
     public void startGame() {
-
+        newFlyingBird();
+        running = true;
+        timer = new Timer(DELAY, this);
+        timer.start();
     }
 
     public void paintComponent(Graphics g) {
@@ -39,6 +47,10 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void draw(Graphics g) {
+
+    }
+
+    public void newFlyingBird() {
 
     }
 
