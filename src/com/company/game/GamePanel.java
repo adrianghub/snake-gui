@@ -11,7 +11,7 @@ import java.util.Random;
 public class GamePanel extends JPanel implements ActionListener {
 
     static final int SCREEN_WIDTH = 640;
-    static final int SCREEN_HEIGHT = 480;
+    static final int SCREEN_HEIGHT = 640;
     static final int UNIT_SIZE = 20;
     static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT / UNIT_SIZE);
     static final int DELAY = 75;
@@ -19,8 +19,8 @@ public class GamePanel extends JPanel implements ActionListener {
     final int [] y = new int[GAME_UNITS];
     int bodyParts = 3;
     int birdsEaten;
-    int appleX;
-    int appleY;
+    int feedX;
+    int feedY;
     char direction = 'R';
     boolean running = false;
     Timer timer;
@@ -29,7 +29,7 @@ public class GamePanel extends JPanel implements ActionListener {
     GamePanel() {
         random = new Random();
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        this.setBackground(Color.darkGray);
+        this.setBackground(Color.black);
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
         startGame();
@@ -43,15 +43,24 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void paintComponent(Graphics g) {
-
+        super.paintComponent(g);
+        draw(g);
     }
 
     public void draw(Graphics g) {
 
+        // Generate grid
+        for (int i=0; i<SCREEN_HEIGHT/UNIT_SIZE; i++) {
+            g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
+            g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE);
+        }
+        g.setColor(Color.MAGENTA.brighter());
+        g.fillRect(feedX, feedY, UNIT_SIZE, UNIT_SIZE);
     }
 
     public void newFlyingBird() {
-
+        feedX = random.nextInt(SCREEN_WIDTH/UNIT_SIZE)*UNIT_SIZE;
+        feedY = random.nextInt(SCREEN_HEIGHT/UNIT_SIZE)*UNIT_SIZE;
     }
 
     public void move() {
