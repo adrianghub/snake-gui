@@ -25,6 +25,7 @@ public class GamePanel extends JPanel implements ActionListener {
     boolean running = false;
     Timer timer;
     Random random;
+    static boolean gameOn = false;
 
     GamePanel() {
         random = new Random();
@@ -39,6 +40,16 @@ public class GamePanel extends JPanel implements ActionListener {
         newFlyingBird();
         running = true;
         timer = new Timer(DELAY, this);
+        timer.start();
+    }
+
+    public void pause() {
+        GamePanel.gameOn = true;
+        timer.stop();
+    }
+
+    public void resume() {
+        GamePanel.gameOn = false;
         timer.start();
     }
 
@@ -65,8 +76,8 @@ public class GamePanel extends JPanel implements ActionListener {
                     g.setColor(new Color(255, 150, 0));
                     g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 } else {
-                    g.setColor(new Color(210, 80, 0 ));
-                    g.setColor(new Color(random.nextInt(255),random.nextInt(255),random.nextInt(255)));
+                    g.setColor(new Color(210, 80, 0));
+                    g.setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
                     g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 }
             }
@@ -74,7 +85,7 @@ public class GamePanel extends JPanel implements ActionListener {
             g.setColor(Color.green);
             g.setFont(new Font("Courier New", Font.BOLD, 35));
             FontMetrics metrics = getFontMetrics(g.getFont());
-            g.drawString("Score: "+birdsEaten, (SCREEN_WIDTH - metrics.stringWidth("Score: "+birdsEaten))/2, g.getFont().getSize());
+            g.drawString("Score: " + birdsEaten, (SCREEN_WIDTH - metrics.stringWidth("Score: " + birdsEaten)) / 2, g.getFont().getSize());
 
         } else {
             gameOver(g);
@@ -112,8 +123,8 @@ public class GamePanel extends JPanel implements ActionListener {
         if ((x[0] == feedX) && (y[0] == feedY)) {
             bodyParts++;
             birdsEaten++;
-            if(birdsEaten > 1) {
-                birdsEaten+=random.nextInt(50)+1;
+            if (birdsEaten > 1) {
+                birdsEaten += random.nextInt(50) + 1;
             }
             newFlyingBird();
         }
@@ -128,23 +139,23 @@ public class GamePanel extends JPanel implements ActionListener {
             }
         }
         // Check if head touches left border
-        if(x[0] < 0) {
+        if (x[0] < 0) {
             running = false;
         }
         // Check if head touches right border
-        if(x[0] > SCREEN_WIDTH) {
+        if (x[0] > SCREEN_WIDTH) {
             running = false;
         }
         // Check if head touches top border
-        if(y[0] < 0) {
+        if (y[0] < 0) {
             running = false;
         }
         // Check if head touches bottom border
-        if(y[0] > SCREEN_HEIGHT) {
+        if (y[0] > SCREEN_HEIGHT) {
             running = false;
         }
 
-        if(!running) {
+        if (!running) {
             timer.stop();
         }
     }
@@ -154,7 +165,7 @@ public class GamePanel extends JPanel implements ActionListener {
         g.setColor(Color.green);
         g.setFont(new Font("Courier New", Font.BOLD, 35));
         FontMetrics metrics1 = getFontMetrics(g.getFont());
-        g.drawString("Score: "+birdsEaten, (SCREEN_WIDTH - metrics1.stringWidth("Score: "+birdsEaten))/2, g.getFont().getSize());
+        g.drawString("Score: " + birdsEaten, (SCREEN_WIDTH - metrics1.stringWidth("Score: " + birdsEaten)) / 2, g.getFont().getSize());
         // Display game over text
         g.setColor(Color.red);
         g.setFont(new Font("Courier New", Font.BOLD, 75));
@@ -195,6 +206,13 @@ public class GamePanel extends JPanel implements ActionListener {
                 case KeyEvent.VK_DOWN:
                     if (direction != 'U') {
                         direction = 'D';
+                    }
+                    break;
+                case KeyEvent.VK_SPACE:
+                    if (GamePanel.gameOn) {
+                        resume();
+                    } else {
+                        pause();
                     }
                     break;
             }
