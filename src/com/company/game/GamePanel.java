@@ -96,7 +96,11 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void checkFeed() {
-
+        if ((x[0] == feedX) && (y[0] == feedY)) {
+            bodyParts++;
+            birdsEaten++;
+            newFlyingBird();
+        }
     }
 
     public void checkCollisions() {
