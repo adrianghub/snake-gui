@@ -49,22 +49,32 @@ public class GamePanel extends JPanel implements ActionListener {
 
     public void draw(Graphics g) {
 
-        // Generate grid
-        for (int i = 0; i < SCREEN_HEIGHT / UNIT_SIZE; i++) {
-            g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
-            g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
-        }
-        g.setColor(Color.MAGENTA.brighter());
-        g.fillRect(feedX, feedY, UNIT_SIZE, UNIT_SIZE);
-
-        for (int i = 0; i < bodyParts; i++) {
-            if (i == 0) {
-                g.setColor(new Color(255, 150, 0));
-                g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
-            } else {
-                g.setColor(new Color(210, 80, 0 ));
-                g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+        if (running) {
+            // Generate grid
+            for (int i = 0; i < SCREEN_HEIGHT / UNIT_SIZE; i++) {
+                g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
+                g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
             }
+            g.setColor(Color.MAGENTA.brighter());
+            g.fillRect(feedX, feedY, UNIT_SIZE, UNIT_SIZE);
+
+            for (int i = 0; i < bodyParts; i++) {
+                if (i == 0) {
+                    g.setColor(new Color(255, 150, 0));
+                    g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+                } else {
+                    g.setColor(new Color(210, 80, 0 ));
+                    g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+                }
+            }
+
+            g.setColor(Color.green);
+            g.setFont(new Font("Courier New", Font.BOLD, 35));
+            FontMetrics metrics = getFontMetrics(g.getFont());
+            g.drawString("Score: "+birdsEaten, (SCREEN_WIDTH - metrics.stringWidth("Score: "+birdsEaten))/2, g.getFont().getSize());
+
+        } else {
+            gameOver(g);
         }
     }
 
@@ -99,6 +109,9 @@ public class GamePanel extends JPanel implements ActionListener {
         if ((x[0] == feedX) && (y[0] == feedY)) {
             bodyParts++;
             birdsEaten++;
+            if(birdsEaten > 1) {
+                birdsEaten+=random.nextInt(50)+1;
+            }
             newFlyingBird();
         }
     }
@@ -134,6 +147,16 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void gameOver(Graphics g) {
+        // Display score text
+        g.setColor(Color.green);
+        g.setFont(new Font("Courier New", Font.BOLD, 35));
+        FontMetrics metrics1 = getFontMetrics(g.getFont());
+        g.drawString("Score: "+birdsEaten, (SCREEN_WIDTH - metrics1.stringWidth("Score: "+birdsEaten))/2, g.getFont().getSize());
+        // Display game over text
+        g.setColor(Color.red);
+        g.setFont(new Font("Courier New", Font.BOLD, 75));
+        FontMetrics metrics2 = getFontMetrics(g.getFont());
+        g.drawString("Game Over", (SCREEN_WIDTH - metrics2.stringWidth("Game Over")) / 2, SCREEN_HEIGHT / 2);
 
     }
 
