@@ -14,7 +14,7 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int SCREEN_HEIGHT = 640;
     static final int UNIT_SIZE = 20;
     static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT / UNIT_SIZE);
-    static final int DELAY = 75;
+    static final int DELAY = 55;
     final int[] x = new int[GAME_UNITS];
     final int[] y = new int[GAME_UNITS];
     int bodyParts = 5;
@@ -51,10 +51,12 @@ public class GamePanel extends JPanel implements ActionListener {
 
         if (running) {
             // Generate grid
+            /*
             for (int i = 0; i < SCREEN_HEIGHT / UNIT_SIZE; i++) {
                 g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
                 g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
             }
+            */
             g.setColor(Color.MAGENTA.brighter());
             g.fillRect(feedX, feedY, UNIT_SIZE, UNIT_SIZE);
 
@@ -64,6 +66,7 @@ public class GamePanel extends JPanel implements ActionListener {
                     g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 } else {
                     g.setColor(new Color(210, 80, 0 ));
+                    g.setColor(new Color(random.nextInt(255),random.nextInt(255),random.nextInt(255)));
                     g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 }
             }
