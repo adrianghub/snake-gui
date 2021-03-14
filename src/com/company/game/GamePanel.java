@@ -16,8 +16,8 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT / UNIT_SIZE);
     static final int DELAY = 75;
     final int[] x = new int[GAME_UNITS];
-    final int [] y = new int[GAME_UNITS];
-    int bodyParts = 3;
+    final int[] y = new int[GAME_UNITS];
+    int bodyParts = 5;
     int birdsEaten;
     int feedX;
     int feedY;
@@ -50,17 +50,27 @@ public class GamePanel extends JPanel implements ActionListener {
     public void draw(Graphics g) {
 
         // Generate grid
-        for (int i=0; i<SCREEN_HEIGHT/UNIT_SIZE; i++) {
-            g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
-            g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE);
+        for (int i = 0; i < SCREEN_HEIGHT / UNIT_SIZE; i++) {
+            g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
+            g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
         }
         g.setColor(Color.MAGENTA.brighter());
         g.fillRect(feedX, feedY, UNIT_SIZE, UNIT_SIZE);
+
+        for (int i = 0; i < bodyParts; i++) {
+            if (i == 0) {
+                g.setColor(new Color(255, 150, 0));
+                g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+            } else {
+                g.setColor(new Color(210, 80, 0 ));
+                g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+            }
+        }
     }
 
     public void newFlyingBird() {
-        feedX = random.nextInt(SCREEN_WIDTH/UNIT_SIZE)*UNIT_SIZE;
-        feedY = random.nextInt(SCREEN_HEIGHT/UNIT_SIZE)*UNIT_SIZE;
+        feedX = random.nextInt(SCREEN_WIDTH / UNIT_SIZE) * UNIT_SIZE;
+        feedY = random.nextInt(SCREEN_HEIGHT / UNIT_SIZE) * UNIT_SIZE;
     }
 
     public void move() {
@@ -70,16 +80,16 @@ public class GamePanel extends JPanel implements ActionListener {
         }
 
         switch (direction) {
-            case 'W':
+            case 'U':
                 y[0] = y[0] - UNIT_SIZE;
                 break;
-            case 'S':
-                y[0]  = y[0] + UNIT_SIZE;
+            case 'D':
+                y[0] = y[0] + UNIT_SIZE;
                 break;
-            case 'A':
+            case 'L':
                 x[0] = x[0] - UNIT_SIZE;
                 break;
-            case 'D':
+            case 'R':
                 x[0] = x[0] + UNIT_SIZE;
                 break;
         }
@@ -99,7 +109,12 @@ public class GamePanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if (running) {
+            move();
+            checkFeed();
+            checkCollisions();
+        }
+        repaint();
     }
 
     public class MyKeyAdapter extends KeyAdapter {
